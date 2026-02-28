@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Rii ❤️ Shezu</title>
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    font-family:Arial, sans-serif;
+    background:#eaf6ff;
+    transition:background 0.8s ease;
+}
+.game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+}
+.character{
+    position:absolute;
+    bottom:100px;
+    text-align:center;
+}
+.face{
+    font-size:60px;
+}
+.body{
+    width:50px;
+    height:60px;
+    background:#ffd6e8;
+    margin:0 auto;
+    border-radius:20px;
+}
+.name{
+    margin-top:5px;
+    font-size:14px;
+    color:#666;
+}
+#rii{
+    left:70%;
+}
+#shezu{
+    left:10%;
+}
+.heart{
+    position:absolute;
+    font-size:24px;
+    animation:floatUp 3s ease forwards;
+}
+@keyframes floatUp{
+    0%{ transform:translateY(0); opacity:1; }
+    100%{ transform:translateY(-200px); opacity:0; }
+}
+#messageBox{
+    display:none;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#fff0f6;
+    padding:25px;
+    border-radius:20px;
+    width:85%;
+    max-width:420px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+#restartBtn{
+    margin-top:15px;
+    padding:8px 16px;
+    border:none;
+    border-radius:20px;
+    background:#ffc2e2;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="game">
+
+<div id="rii" class="character">
+    <div class="face">😊</div>
+    <div class="body"></div>
+    <div class="name">Rii</div>
+</div>
+
+<div id="shezu" class="character">
+    <div class="face">🙂</div>
+    <div class="body"></div>
+    <div class="name">Shezu</div>
+</div>
+
+<div id="messageBox">
+<p>
+Happy Two Months ❤️<br><br>
+I’m so, so grateful to have you.<br>
+You’re the best thing that has happened to me, lovey.<br><br>
+You complete me in the softest, nerdiest, sweetest way.<br>
+I hope we stay like this forever and ever and ever.<br><br>
+I love you so much.<br>
+Stay nerdy, lovey.
+</p>
+<button id="restartBtn" onclick="restartGame()">Restart</button>
+</div>
+
+</div>
+
+<script>
+let shezu = document.getElementById("shezu");
+let rii = document.getElementById("rii");
+let messageBox = document.getElementById("messageBox");
+
+let position = 10; // percentage
+let speed = 2;
+let triggered = false;
+
+document.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight" && !triggered){
+        moveBoy();
+    }
+});
+
+function moveBoy(){
+    position += speed;
+    shezu.style.left = position + "%";
+
+    let shezuRect = shezu.getBoundingClientRect();
+    let riiRect = rii.getBoundingClientRect();
+
+    if(shezuRect.right >= riiRect.left){
+        // Stop exactly at collision
+        let overlap = shezuRect.right - riiRect.left;
+        let adjust = (overlap / window.innerWidth) * 100;
+        position -= adjust;
+        shezu.style.left = position + "%";
+        triggerLove();
+    }
+}
+
+function triggerLove(){
+    if(triggered) return;
+    triggered = true;
+
+    document.body.style.background = "#ffdce8";
+    messageBox.style.display = "block";
+    createHearts();
+}
+
+function createHearts(){
+    for(let i=0;i<20;i++){
+        let heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = (50 + Math.random()*20 - 10) + "%";
+        heart.style.bottom = "150px";
+        document.body.appendChild(heart);
+
+        setTimeout(()=>{
+            heart.remove();
+        },3000);
+    }
+}
+
+function restartGame(){
+    position = 10;
+    shezu.style.left = "10%";
+    document.body.style.background = "#eaf6ff";
+    messageBox.style.display = "none";
+    triggered = false;
+}
+</script>
+
+</body>
+</html>
